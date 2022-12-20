@@ -393,10 +393,99 @@ def bench_subtitles_en_literal(suite_dir):
         Command('rg', ['rg', pat, en]),
         Command('rg (no mmap)', ['rg', '--no-mmap', pat, en]),
         Command('grep', ['grep', pat, en], env=GREP_ASCII),
+        Command('grep (C)', ['grep', pat, en], env=GREP_ASCII),
+        Command('grep (U)', ['grep', pat, en], env=GREP_UNICODE),
+
         Command('rg (lines)', ['rg', '-n', pat, en]),
         Command('ag (lines)', ['ag', '-s', pat, en]),
-        Command('grep (lines)', ['grep', '-n', pat, en], env=GREP_ASCII),
+        Command('grep (C, lines)', ['grep', '-n', pat, en], env=GREP_ASCII),
+        Command('grep (U, lines)', ['grep', '-n', pat, en], env=GREP_UNICODE),
         Command('ugrep (lines)', ['ugrep', '-n', pat, en])
+    ])
+
+
+def bench_script_commentlines_1 (suite_dir):
+    fp = path.join(suite_dir, 'htd.sh')
+    pat_re = '^\s*(#.*)?$'
+    pat_bre = '^\s*\(#.*\)\?$'
+
+    return Benchmark(pattern=pat_re, commands=[
+        Command('rg', ['rg', pat_re, fp]),
+        Command('rg (C)', ['rg', '--no-unicode', pat_re, fp]),
+        Command('rg (U)', ['rg', pat_re, fp], env=GREP_UNICODE),
+        Command('rg (no mmap)', ['rg', '--no-mmap', pat_re, fp]),
+
+        Command('grep (B)', ['grep', pat_bre, fp]),
+        Command('grep', ['grep', '-E', pat_re, fp]),
+        Command('grep (C)', ['grep', '-E', pat_re, fp], env=GREP_ASCII),
+        Command('grep (U)', ['grep', '-E', pat_re, fp], env=GREP_UNICODE),
+    ])
+
+def bench_script_funline_1 (suite_dir):
+    fp = path.join(suite_dir, 'htd.sh')
+    pat = '^htd__tosort'
+
+    return Benchmark(pattern=pat, commands=[
+        Command('rg', ['rg', pat, fp]),
+        Command('rg (C)', ['rg', '--no-unicode', pat, fp]),
+        Command('rg (U)', ['rg', pat, fp], env=GREP_UNICODE),
+        Command('rg (no mmap)', ['rg', '--no-mmap', pat, fp]),
+
+        Command('grep', ['grep', pat, fp]),
+        Command('grep (E)', ['grep', '-E', pat, fp]),
+        Command('grep (C)', ['grep', pat, fp], env=GREP_ASCII),
+        Command('grep (U)', ['grep', pat, fp], env=GREP_UNICODE),
+    ])
+
+def bench_script_commentlines_2 (suite_dir):
+    fp = path.join(suite_dir, '*.sh')
+    pat_re = '^\s*(#.*)?$'
+    pat_bre = '^\s*\(#.*\)\?$'
+
+    return Benchmark(pattern=pat_re, commands=[
+        Command('rg', ['rg', pat_re, fp]),
+        Command('rg (C)', ['rg', '--no-unicode', pat_re, fp]),
+        Command('rg (U)', ['rg', pat_re, fp], env=GREP_UNICODE),
+        Command('rg (no mmap)', ['rg', '--no-mmap', pat_re, fp]),
+
+        Command('grep (B)', ['grep', pat_bre, fp]),
+        Command('grep (E)', ['grep', '-E', pat_re, fp]),
+        Command('grep (E,C)', ['grep', '-E', pat_re, fp], env=GREP_ASCII),
+        Command('grep (E,U)', ['grep', '-E', pat_re, fp], env=GREP_UNICODE),
+        Command('grep (B,C)', ['grep', pat_bre, fp], env=GREP_ASCII),
+        Command('grep (B,U)', ['grep', pat_bre, fp], env=GREP_UNICODE),
+    ])
+
+def bench_script_funline_2m (suite_dir):
+    fp = path.join(suite_dir, '*.sh')
+    pat = '^htd__tosort'
+
+    return Benchmark(pattern=pat, commands=[
+        Command('rg', ['rg', pat, fp]),
+        Command('rg (C)', ['rg', '--no-unicode', pat, fp]),
+        Command('rg (U)', ['rg', pat, fp], env=GREP_UNICODE),
+        Command('rg (no mmap)', ['rg', '--no-mmap', pat, fp]),
+
+        Command('grep', ['grep', pat, fp]),
+        Command('grep (E)', ['grep', '-E', pat, fp]),
+        Command('grep (C)', ['grep', pat, fp], env=GREP_ASCII),
+        Command('grep (U)', ['grep', pat, fp], env=GREP_UNICODE),
+    ])
+
+def bench_script_funline_m1 (suite_dir):
+    fp = path.join(suite_dir, '*.sh')
+    pat = '^htd__tosort'
+
+    return Benchmark(pattern=pat, commands=[
+        Command('rg', ['rg', '-m', '1', pat, fp]),
+        Command('rg (C)', ['rg', '-m', '1', pat, fp], env=GREP_ASCII),
+        Command('rg (U)', ['rg', '-m', '1', pat, fp], env=GREP_UNICODE),
+        Command('rg (no mmap)', ['rg', '--no-mmap', '-m', '1', pat, fp]),
+
+        Command('grep', ['grep', '-m', '1', pat, fp]),
+        Command('grep (E)', ['grep', '-m', '1', '-E', pat, fp]),
+        Command('grep (C)', ['grep', '-m', '1', pat, fp], env=GREP_ASCII),
+        Command('grep (U)', ['grep', '-m', '1', pat, fp], env=GREP_UNICODE),
     ])
 
 
